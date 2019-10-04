@@ -2,19 +2,21 @@
 
 require_once "util.inc.php";
 require_once "db.inc.php";
-// require_once "auth.inc.php";
+require_once "auth.inc.php";
 
 session_start();
+auth_confirm();
 
-$_SESSION["admin_login"] = "naomi";
+// var_dump($_SESSION["admin_login"]);
+// exit;
 
-  // if ($_SESSION["admin_login"] == TRUE) {
-  //   header("Location: top");
-  //   exit;
-  // }
+// $_SESSION["admin_login"] = "naomi";
 
-// del_session();
-// auth_confirm();
+  if ($_SESSION["member_login"] == TRUE) {
+    header("Location: member");
+    exit;
+  }
+
 
 $id = "";
 
@@ -63,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           $_SESSION["class"] = $info["class"];
           $_SESSION["class_number"] = $info["class_number"];
           $_SESSION["bus"] = $info["bus"];
-          $_SESSION["admin_login"] = TRUE; //ログイン成功のフラグ
+          $_SESSION["member_login"] = TRUE; //ログイン成功のフラグ
           // var_dump($_SESSION["admin_name"]);
           // exit;
           header("Location: member");
@@ -102,39 +104,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <div class="h1-area">
             <h1 class="common-title">在園児専用ページ</h1>
         </div>
-
-           <section id="s-nav" class="section">
+        <section id="s-nav" class="section">
             <p><img src="<?php echo get_template_directory_uri(); ?>/images/point.gif" alt=""> ユーザIDとパスワードを入力して「ログイン」ボタンを押してください</p>
         </section>
-    <section id="member-login">
-
-        <div class="h2-area-dbadmin">
-            <h2>ログイン<br><span class="h2-sub"> Login</span></h2>
-            <div>
-                <?php if (isset($messageError)): ?>
-                <p class="error">
-                    <?php echo h($messageError); ?>
-                </p>
-                <?php endif; ?>
-                <form action="" method="post" class="login">
-                    <?php if (isset($idError)): ?>
+        <section id="member-login">
+            <div class="h2-area-dbadmin">
+                <h2>ログイン<br><span class="h2-sub"> Login</span></h2>
+                <div>
+                    <?php if (isset($messageError)): ?>
                     <p class="error">
-                        <?php echo h($idError); ?>
+                        <?php echo h($messageError); ?>
                     </p>
                     <?php endif; ?>
-                    <p>ユーザーID　<input type="text" name="id" value="<?php echo h($user); ?>"></p><br>
-                    <?php if (isset($passError)): ?>
-                    <p class="error">
-                        <?php echo h($passError); ?>
-                    </p>
-                    <?php endif; ?>
-                    <p>パスワード　<input type="password" name="pass"></p><br>
-                    <p class="right">
-                        <input type="submit" value="ログイン"></p>
-                </form>
+                    <form action="" method="post" class="login">
+                        <?php if (isset($idError)): ?>
+                        <p class="error">
+                            <?php echo h($idError); ?>
+                        </p>
+                        <?php endif; ?>
+                        <p>ユーザーID　<input type="text" name="id" value="<?php echo h($user); ?>"></p><br>
+                        <?php if (isset($passError)): ?>
+                        <p class="error">
+                            <?php echo h($passError); ?>
+                        </p>
+                        <?php endif; ?>
+                        <p>パスワード　<input type="password" name="pass"></p><br>
+                        <p class="right">
+                            <input type="submit" value="ログイン"></p>
+                    </form>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
         <div class="line_bottom"></div>
     </main> <!-- main -->
     <?php get_footer(); ?>
